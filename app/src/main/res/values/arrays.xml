@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="export_formats">
+        <item>@string/csv</item>
+        <item>@string/sql</item>
+    </array>
+    <string name="csv">CSV</string>
+    <string name="sql">SQL</string>
+</resources>

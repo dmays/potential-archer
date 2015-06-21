@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+        android:padding="16dp">
+
+    <Button
+            android:id="@+id/capture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="capture"
+            />
+    <Button
+            android:id="@+id/examine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="examine"
+            />
+
+    <Button
+            android:id="@+id/export"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="export database"
+            />
+</LinearLayout>

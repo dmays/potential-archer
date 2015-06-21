@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Potential Archer</string>
+
+    <string name="title_activity_data_view">Examine Data</string>
+    <string name="title_activity_location_capture">Location Capture</string>
+
+    <string name="no_data">No data</string>
+    <string name="lat">lat</string>
+    <string name="lon">lon</string>
+    <string name="time">time</string>
+    <string name="acc">acc</string>
+    <string name="alt">alt</string>
+    <string name="bear">bear</string>
+    <string name="speed">speed</string>
+    <string name="rows">rows</string>
+    <string name="wait">[wait]</string>
+    <string name="export">Export</string>
+    <string name="cancel">Cancel</string>
+    <string name="unknown_selection">Unknown selection made</string>
+    <string name="enable_gps">Enable GPS</string>
+    <string name="enable_gps_message">Please enable GPS</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Exit</string>
+    <string name="unable_to_write_file">Unable to write file.</string>
+    <string name="var_database_exported_message">"Database exported to: %1$s"</string>
+</resources>
