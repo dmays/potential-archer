@@ -1,4 +1,18 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.19.1'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     compileSdkVersion 22
@@ -26,4 +40,22 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
+        transitive = true;
+    }
+}
+
+afterEvaluate {
+    initCrashlyticsPropertiesIfNeeded()
+}
+
+def initCrashlyticsPropertiesIfNeeded() {
+    def propertiesFile = file('crashlytics.properties')
+    if (!propertiesFile.exists()) {
+        def commentMessage = "Crashlytics properties from system environment to avoid committing to source control."
+        ant.propertyfile(file: "crashlytics.properties", comment: commentMessage) {
+            entry(key: "apiSecret", value: crashlyticsApiSecret)
+            entry(key: "apiKey", value: crashlyticsApiKey)
+        }
+    }
 }
