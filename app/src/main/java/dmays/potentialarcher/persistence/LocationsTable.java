@@ -4,10 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
-
-import java.util.ArrayList;
 
 import dmays.potentialarcher.util.BundleUtil;
 
@@ -60,57 +57,13 @@ public class LocationsTable extends SQLiteTable {
         sb.append(BEARING).append(" REAL NOT NULL, ");
         sb.append(SPEED).append(" REAL NOT NULL, ");
         sb.append(PROVIDER).append(" TEXT NOT NULL");
-
         sb.append(");");
         return sb.toString();
     }
 
     @Override
     public void onUpdate(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        ArrayList<Location> locations = new ArrayList<>();
-        db.beginTransaction();
-
-        String[] almostAllColumns = new String[ALL_COLUMNS.length - 1];
-        System.arraycopy(ALL_COLUMNS, 0, almostAllColumns, 0, ALL_COLUMNS.length - 1);
-        Cursor cursor = db.query(TABLE_NAME, almostAllColumns, null, null, null, null, null);
-        if (null != cursor) {
-            if (cursor.moveToFirst()) {
-                // get previous locations from table
-                do {
-                    // adding provider column for db version 2
-                    Location location = fromCursor(cursor);
-                    Log.i(TAG, "Recreated location from cursor: " + location.toString());
-                    if (location.getProvider().equals(DATABASE_PROVIDER)) {
-                        location.setProvider(LocationManager.GPS_PROVIDER);
-                    }
-                    locations.add(location);
-                } while (cursor.moveToNext());
-
-                dropTable(db);
-                onCreate(db);
-
-                // add previous locations to new table
-                Log.i(TAG, "populating new table");
-                for (Location location : locations) {
-                    long rowId = db.insert(TABLE_NAME, null, toValues(location));
-                    if (rowId == -1) {
-                        Log.e(TAG, "Error inserting location: " + location.toString());
-                    }
-                }
-
-                db.setTransactionSuccessful();
-            } else {
-                Log.i(TAG, "No records to update, recreating table.");
-                dropTable(db);
-                onCreate(db);
-            }
-        } else {
-            Log.wtf(TAG, "Cursor is null while updating");
-            // TODO: if this occurs a major failure is indicated -- how to proceed?
-        }
-
-        db.endTransaction();
+        Log.d(TAG, "onUpdate: nothing to do");
     }
 
     @Override
@@ -133,14 +86,14 @@ public class LocationsTable extends SQLiteTable {
      */
     public static ContentValues toValues(Location location) {
         ContentValues value = new ContentValues();
-        value.put(LocationsTable.LAT, location.getLatitude());
-        value.put(LocationsTable.LON, location.getLongitude());
-        value.put(LocationsTable.TIME, location.getTime());
-        value.put(LocationsTable.ACCURACY, location.getAccuracy());
-        value.put(LocationsTable.ALTITUDE, location.getAltitude());
-        value.put(LocationsTable.BEARING, location.getBearing());
-        value.put(LocationsTable.SPEED, location.getSpeed());
-        value.put(LocationsTable.PROVIDER, location.getProvider());
+        value.put(LAT, location.getLatitude());
+        value.put(LON, location.getLongitude());
+        value.put(TIME, location.getTime());
+        value.put(ACCURACY, location.getAccuracy());
+        value.put(ALTITUDE, location.getAltitude());
+        value.put(BEARING, location.getBearing());
+        value.put(SPEED, location.getSpeed());
+        value.put(PROVIDER, location.getProvider());
         if (location.getExtras() != null) {
             BundleUtil.logBundleMap(location.getExtras());
         }
@@ -158,14 +111,14 @@ public class LocationsTable extends SQLiteTable {
      */
     public static Location fromCursor(Cursor cursor) {
         Location loc = new Location(DATABASE_PROVIDER);
-        loc.setLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(LocationsTable.LAT)));
-        loc.setLongitude(cursor.getDouble(cursor.getColumnIndexOrThrow(LocationsTable.LON)));
-        loc.setTime(cursor.getLong(cursor.getColumnIndexOrThrow(LocationsTable.TIME)));
-        loc.setAccuracy(cursor.getFloat(cursor.getColumnIndexOrThrow(LocationsTable.ACCURACY)));
-        loc.setAltitude(cursor.getDouble(cursor.getColumnIndexOrThrow(LocationsTable.ALTITUDE)));
-        loc.setBearing(cursor.getFloat(cursor.getColumnIndexOrThrow(LocationsTable.BEARING)));
-        loc.setSpeed(cursor.getFloat(cursor.getColumnIndexOrThrow(LocationsTable.SPEED)));
-        String provider = cursor.getString(cursor.getColumnIndexOrThrow(LocationsTable.PROVIDER));
+        loc.setLatitude(cursor.getDouble(cursor.getColumnIndexOrThrow(LAT)));
+        loc.setLongitude(cursor.getDouble(cursor.getColumnIndexOrThrow(LON)));
+        loc.setTime(cursor.getLong(cursor.getColumnIndexOrThrow(TIME)));
+        loc.setAccuracy(cursor.getFloat(cursor.getColumnIndexOrThrow(ACCURACY)));
+        loc.setAltitude(cursor.getDouble(cursor.getColumnIndexOrThrow(ALTITUDE)));
+        loc.setBearing(cursor.getFloat(cursor.getColumnIndexOrThrow(BEARING)));
+        loc.setSpeed(cursor.getFloat(cursor.getColumnIndexOrThrow(SPEED)));
+        String provider = cursor.getString(cursor.getColumnIndexOrThrow(PROVIDER));
 
         // null check needed for migration to version 2 of db.  Could probably do away with after a time.
         if (provider != null) {
