@@ -118,12 +118,7 @@ public class LocationsTable extends SQLiteTable {
         loc.setAltitude(cursor.getDouble(cursor.getColumnIndexOrThrow(ALTITUDE)));
         loc.setBearing(cursor.getFloat(cursor.getColumnIndexOrThrow(BEARING)));
         loc.setSpeed(cursor.getFloat(cursor.getColumnIndexOrThrow(SPEED)));
-        String provider = cursor.getString(cursor.getColumnIndexOrThrow(PROVIDER));
-
-        // null check needed for migration to version 2 of db.  Could probably do away with after a time.
-        if (provider != null) {
-            loc.setProvider(provider);
-        }
+        loc.setProvider(cursor.getString(cursor.getColumnIndexOrThrow(PROVIDER)));
 
         return loc;
     }
